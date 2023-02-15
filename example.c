@@ -5,23 +5,22 @@
 uint8_t cols[] = {4, 3, 2, 1, 0}; // Keypad matrix column GPIOs
 uint8_t rows[] = {9, 8, 7, 6, 5}; // Keypad matrix row GPIOs
 
-#define keys_num (sizeof(cols) * sizeof(rows))
-
-KeypadMatrix keypad;
-bool previous_pressed_keys[keys_num];
+KeypadMatrix keypad_1;
 
 static bool keypad_task() {
     // The output of keypad_read() is an array containing
-    // the state of each key.
-    bool *pressed = keypad_read(&keypad);
+    // the state of each key:
+    bool *pressed = keypad_read(&keypad_1);
 
-    for(uint8_t i=0; i<keys_num; i++) {
-        if(pressed[i] != previous_pressed_keys[i]){ // if the pressed state has changed
-            if(pressed[i]){
+    // Alternatively, the current state of the keypad
+    // can be compared with the previous scan:
+    for(uint8_t i=0; i<keypad_1.size; i++) {
+        if(keypad_1.pressed[i] != keypad_1.previous_pressed[i]){ // the pressed state has changed
+            if(keypad_1.pressed[i]){
                 printf("Key %d pressed\n",i);
-                previous_pressed_keys[i] = true;
+                keypad_1.previous_pressed[i] = true;
             } else { // the key is not pressed, but it was before
-                previous_pressed_keys[i] = false;
+                keypad_1.previous_pressed[i] = false;
                 printf("Key %d released\n",i);
             }
         }
@@ -30,6 +29,12 @@ static bool keypad_task() {
 
 int main() {
     stdio_init_all();
+
+    // Declare the number of columns and rows
+    keypad_set_size(&keypad_1, 5, 5);
+
+    // Apply the configuration defined earlier 
+    keypad_set_keys(&keypad_1, cols, rows);
 
     while (true) {
         keypad_task();
