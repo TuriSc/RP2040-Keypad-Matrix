@@ -8,12 +8,16 @@ uint8_t rows[] = {9, 8, 7, 6, 5}; // Keypad matrix row GPIOs
 KeypadMatrix keypad_1;
 
 static bool keypad_task() {
-    // The output of keypad_read() is an array containing
-    // the state of each key:
-    bool *pressed = keypad_read(&keypad_1);
+    keypad_read(&keypad_1);
 
-    // Alternatively, the current state of the keypad
-    // can be compared with the previous scan:
+    /* Alternatively, the output of keypad_read() can
+    be stored as a pointer to the array containing
+    the state of each key:
+    bool *pressed = keypad_read(&keypad_1);
+    */
+
+    // After calling keypad_read(), the current state of
+    // the keypad can be compared with values from the previous scan:
     for(uint8_t i=0; i<keypad_1.size; i++) {
         if(keypad_1.pressed[i] != keypad_1.previous_pressed[i]){ // the pressed state has changed
             if(keypad_1.pressed[i]){
