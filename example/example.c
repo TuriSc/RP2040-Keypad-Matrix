@@ -2,8 +2,8 @@
 #include <pico/stdlib.h>
 #include "keypad.h"
 
-uint8_t cols[] = {4, 3, 2, 1, 0}; // Keypad matrix column GPIOs
-uint8_t rows[] = {9, 8, 7, 6, 5}; // Keypad matrix row GPIOs
+const uint8_t cols[] = {4, 3, 2, 1, 0}; // Keypad matrix column GPIOs
+const uint8_t rows[] = {9, 8, 7, 6, 5}; // Keypad matrix row GPIOs
 
 KeypadMatrix keypad_1;
 
