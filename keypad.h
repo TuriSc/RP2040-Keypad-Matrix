@@ -27,7 +27,7 @@ typedef struct {
 
 void keypad_set_size(KeypadMatrix* keypad_struct, uint8_t cols, uint8_t rows);
 
-void keypad_set_keys(KeypadMatrix* keypad_struct, uint8_t *cols, uint8_t *rows);
+void keypad_set_keys(KeypadMatrix* keypad_struct, const uint8_t *cols, const uint8_t *rows);
 
 bool * keypad_read(KeypadMatrix* keypad_struct);
 

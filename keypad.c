@@ -14,7 +14,7 @@ void keypad_set_size(KeypadMatrix* _kp, uint8_t cols, uint8_t rows){
     _kp->rows_num = rows;
 }
 
-void keypad_set_keys(KeypadMatrix* _kp, uint8_t *cols, uint8_t *rows){
+void keypad_set_keys(KeypadMatrix* _kp, const uint8_t *cols, const uint8_t *rows){
     for (uint8_t i = 0; i < _kp->cols_num; i++) {
         _kp->_cols[i] = cols[i];
         gpio_init(cols[i]);
