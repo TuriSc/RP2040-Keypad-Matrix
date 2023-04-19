@@ -1,47 +1,49 @@
 #include <stdio.h>
 #include <pico/stdlib.h>
-#include "keypad.h"
+#include "keypad.h" // Import the library. https://github.com/TuriSc/RP2040-Keypad-Matrix
 
-const uint8_t cols[] = {4, 3, 2, 1, 0}; // Keypad matrix column GPIOs
-const uint8_t rows[] = {9, 8, 7, 6, 5}; // Keypad matrix row GPIOs
+// Define the keypad matrix column GPIOs
+const uint8_t cols[] = {4, 5, 6, 7};
+// Define the keypad matrix row GPIOs
+const uint8_t rows[] = {0, 1, 2, 3};
 
-KeypadMatrix keypad_1;
+// Create the keypad
+KeypadMatrix keypad;
 
-static bool keypad_task() {
-    keypad_read(&keypad_1);
+// Define the callbacks for each event
+void key_pressed(uint8_t key){
+    printf("Key %d pressed\n", key);
+}
 
-    /* Alternatively, the output of keypad_read() can
-    be stored as a pointer to the array containing
-    the state of each key:
-    bool *pressed = keypad_read(&keypad_1);
-    */
+void key_released(uint8_t key){
+    printf("Key %d released\n", key);
+}
 
-    // After calling keypad_read(), the current state of
-    // the keypad can be compared with values from the previous scan:
-    for(uint8_t i=0; i<keypad_1.size; i++) {
-        if(keypad_1.pressed[i] != keypad_1.previous_pressed[i]){ // the pressed state has changed
-            if(keypad_1.pressed[i]){
-                printf("Key %d pressed\n",i);
-                keypad_1.previous_pressed[i] = true;
-            } else { // the key is not pressed, but it was before
-                keypad_1.previous_pressed[i] = false;
-                printf("Key %d released\n",i);
-            }
-        }
-    }
+void key_long_pressed(uint8_t key){
+    printf("Key %d long pressed\n", key);
 }
 
 int main() {
     stdio_init_all();
 
-    // Declare the number of columns and rows
-    keypad_set_size(&keypad_1, 5, 5);
+    // Apply the keypad configuration defined earlier 
+    // and declare the number of columns and rows
+    keypad_init(&keypad, cols, rows, 4, 4);
 
-    // Apply the configuration defined earlier 
-    keypad_set_keys(&keypad_1, cols, rows);
+    // Assign the callbacks for each event
+    keypad_on_press(&keypad, key_pressed);
+    keypad_on_release(&keypad, key_released);
+    keypad_on_long_press(&keypad, key_long_pressed);
+
 
     while (true) {
-        keypad_task();
-        sleep_ms(50);
+        // Poll the keypad
+        keypad_read(&keypad);
+        /* Alternatively, the output of keypad_read() can
+        be stored as a pointer to the array containing
+        the state of each key:
+        bool *pressed = keypad_read(&keypad);
+        */
+        sleep_ms(5);
     }
 }
