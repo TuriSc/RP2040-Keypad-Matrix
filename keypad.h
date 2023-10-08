@@ -14,6 +14,10 @@
 
 #include <pico/stdlib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // By default the library supports keypads up to 5x5 keys in size.
 // Adjust the following value in case your matrix is larger.
 #define SIDE_MAX_SIZE   5
@@ -48,5 +52,9 @@ void keypad_on_press(KeypadMatrix* _kp, void (*callback)(uint8_t key));
 void keypad_on_long_press(KeypadMatrix* _kp, void (*callback)(uint8_t key));
 
 void keypad_on_release(KeypadMatrix* _kp, void (*callback)(uint8_t key));
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
