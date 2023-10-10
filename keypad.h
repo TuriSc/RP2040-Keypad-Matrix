@@ -18,9 +18,9 @@
 extern "C" {
 #endif
 
-// By default the library supports keypads up to 5x5 keys in size.
+// By default the library supports keypads up to 8x8 keys in size.
 // Adjust the following value in case your matrix is larger.
-#define SIDE_MAX_SIZE   5
+#define SIDE_MAX_SIZE   8
 
 #define HOLD_THRESHOLD  1500 // How many milliseconds to hold a key to trigger a 'long press'
 
