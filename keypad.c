@@ -63,7 +63,7 @@ bool * keypad_read(KeypadMatrix* _kp){
         gpio_put(_kp->_rows[row], 1);
         busy_wait_us(10000);
         for (int col = 0; col < _kp->cols_num; col++) {
-            uint8_t k = (_kp->rows_num * row) + col;
+            uint8_t k = (_kp->cols_num * row) + col;
             _kp->pressed[k] = gpio_get(_kp->_cols[col]);
 
             if(_kp->pressed[k] != _kp->previous_pressed[k]){
