@@ -35,6 +35,8 @@ int main() {
     keypad_on_release(&keypad, key_released);
     keypad_on_long_press(&keypad, key_long_pressed);
 
+    // Adjust the hold threshold to two seconds. Default is 1500ms
+    keypad_set_hold_threshold(&keypad, 2000);
 
     while (true) {
         // Poll the keypad

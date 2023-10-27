@@ -5,6 +5,7 @@
 * Author:Turi Scandurra
 * 
 * Version history:
+* 2023-10-27 - v1.2.0 - Hold threshold can now be customized at runtime
 * 2023-04-19 - v1.1.0 - Detect long presses; better example
 * 2023-02-13 - v1.0.0 - First release
 */
@@ -43,6 +44,8 @@ void keypad_init(KeypadMatrix* _kp, const uint8_t *cols, const uint8_t *rows, ui
     _kp->on_press = noop;
     _kp->on_long_press = noop;
     _kp->on_release = noop;
+
+    _kp->hold_threshold = HOLD_THRESHOLD_DEFAULT;
 }
 
 void keypad_on_press(KeypadMatrix* _kp, void (*callback)(uint8_t key)){
@@ -78,7 +81,7 @@ bool * keypad_read(KeypadMatrix* _kp){
             } else {
                 if(_kp->pressed[k]){
                     uint64_t duration = now - _kp->press_times[k];
-                    if (duration > (HOLD_THRESHOLD * 1000) && !_kp->long_pressed[k]){
+                    if (duration > (_kp->hold_threshold * 1000) && !_kp->long_pressed[k]){
                         _kp->on_long_press(k);
                         _kp->long_pressed[k] = true;
                     }
@@ -88,4 +91,8 @@ bool * keypad_read(KeypadMatrix* _kp){
         gpio_put(_kp->_rows[row], 0);
     }
     return _kp->pressed;
+}
+
+void keypad_set_hold_threshold(KeypadMatrix* _kp, uint16_t threshold_ms){
+    _kp->hold_threshold = threshold_ms;
 }
