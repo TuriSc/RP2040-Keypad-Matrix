@@ -4,10 +4,12 @@ A C library to poll a keypad matrix with a Raspberry Pi Pico.
 Multiple keypads can be used simultaneously.
 It detects short and long key presses.
 
-### My projects using this library
+### Projects using this library
 
 - [Jukephone](https://github.com/TuriSc/Jukephone)
+- [Picophonica](https://github.com/TuriSc/Picophonica)
 - [VRRVRR](https://github.com/TuriSc/VRRVRR)
+
 
 ### Version history
 
