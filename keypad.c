@@ -1,25 +1,41 @@
-/*
-* RP2040-Keypad-Matrix
-* Keypad matrix polling library for Raspberry Pi Pico
-*
-* Author:Turi Scandurra
-* 
-* Version history:
-* 2023-10-27 - v1.2.0 - Hold threshold can now be customized at runtime
-* 2023-04-19 - v1.1.0 - Detect long presses; better example
-* 2023-02-13 - v1.0.0 - First release
-*/
+/**
+ * @file keypad.c
+ * @brief Keypad matrix polling library for Raspberry Pi Pico SDK
+ *
+ * @author Turi Scandurra
+ * @version 1.2.0
+ * @date 2023-10-27
+ */
 
 #include "keypad.h"
 
+/**
+ * @brief No-op function for callback
+ *
+ * @param key Key number
+ */
 void noop(uint8_t key){ ; }
 
+/**
+ * @brief Set the size of the keypad matrix
+ *
+ * @param _kp Pointer to the KeypadMatrix structure
+ * @param cols_num Number of columns
+ * @param rows_num Number of rows
+ */
 void keypad_set_size(KeypadMatrix* _kp, uint8_t cols_num, uint8_t rows_num){
     _kp->size = cols_num * rows_num;
     _kp->cols_num = cols_num;
     _kp->rows_num = rows_num;
 }
 
+/**
+ * @brief Set the column and row GPIOs for the keypad matrix
+ *
+ * @param _kp Pointer to the KeypadMatrix structure
+ * @param cols Array of column GPIOs
+ * @param rows Array of row GPIOs
+ */
 void keypad_set_keys(KeypadMatrix* _kp, const uint8_t *cols, const uint8_t *rows){
     for (uint8_t i = 0; i < _kp->cols_num; i++) {
         _kp->_cols[i] = cols[i];
@@ -33,6 +49,15 @@ void keypad_set_keys(KeypadMatrix* _kp, const uint8_t *cols, const uint8_t *rows
     }
 }
 
+/**
+ * @brief Initialize the keypad matrix
+ *
+ * @param _kp Pointer to the KeypadMatrix structure
+ * @param cols Array of column GPIOs
+ * @param rows Array of row GPIOs
+ * @param cols_num Number of columns
+ * @param rows_num Number of rows
+ */
 void keypad_init(KeypadMatrix* _kp, const uint8_t *cols, const uint8_t *rows, uint8_t cols_num, uint8_t rows_num){
     // Set keypad size
     keypad_set_size(_kp, cols_num, rows_num);
@@ -48,18 +73,42 @@ void keypad_init(KeypadMatrix* _kp, const uint8_t *cols, const uint8_t *rows, ui
     _kp->hold_threshold = HOLD_THRESHOLD_DEFAULT;
 }
 
+/**
+ * @brief Set the callback function for key press event
+ *
+ * @param _kp Pointer to the KeypadMatrix structure
+ * @param callback Callback function
+ */
 void keypad_on_press(KeypadMatrix* _kp, void (*callback)(uint8_t key)){
     _kp->on_press = callback;
 }
 
+/**
+ * @brief Set the callback function for long press event
+ *
+ * @param _kp Pointer to the KeypadMatrix structure
+ * @param callback Callback function
+ */
 void keypad_on_long_press(KeypadMatrix* _kp, void (*callback)(uint8_t key)){
     _kp->on_long_press = callback;
 }
 
+/**
+ * @brief Set the callback function for key release event
+ *
+ * @param _kp Pointer to the KeypadMatrix structure
+ * @param callback Callback function
+ */
 void keypad_on_release(KeypadMatrix* _kp, void (*callback)(uint8_t key)){
     _kp->on_release = callback;
 }
 
+/**
+ * @brief Read the current state of the keypad matrix
+ *
+ * @param _kp Pointer to the KeypadMatrix structure
+ * @return Pointer to the array of key press states
+ */
 bool * keypad_read(KeypadMatrix* _kp){
     uint64_t now = time_us_64();
     for (uint8_t row = 0; row < _kp->rows_num; row++) {
@@ -93,6 +142,13 @@ bool * keypad_read(KeypadMatrix* _kp){
     return _kp->pressed;
 }
 
+/**
+ * @brief Set the hold threshold for long press detection
+ *
+ * @param _kp Pointer to the KeypadMatrix structure
+ * @param threshold_ms Hold threshold in milliseconds
+ */
 void keypad_set_hold_threshold(KeypadMatrix* _kp, uint16_t threshold_ms){
     _kp->hold_threshold = threshold_ms;
 }
+
