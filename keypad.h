@@ -166,7 +166,7 @@ void keypad_on_release(KeypadMatrix* _kp, void (*callback)(uint8_t key));
  * @param _kp Pointer to the KeypadMatrix structure
  * @param threshold_ms Hold threshold in milliseconds
  */
-void keypad_set_hold_threshold(KeypadMatrix _kp, uint16_t threshold_ms);
+void keypad_set_hold_threshold(KeypadMatrix* _kp, uint16_t threshold_ms);
 
 #ifdef __cplusplus
 }
